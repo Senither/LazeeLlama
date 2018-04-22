@@ -1,0 +1,20 @@
+{
+  "name": "LazeeLlama",
+  "version": "1.0.0",
+  "description": "A simple Discord bot that sends messages in a channel based off tweets from Twitter.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alexis Tan <alexis@sen-dev.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^9.6.6",
+    "discord.js": "^11.3.2",
+    "knex": "^0.14.6",
+    "sqlite3": "^4.0.0",
+    "twit": "^2.2.9",
+    "unescape": "^1.0.1"
+  }
+}
