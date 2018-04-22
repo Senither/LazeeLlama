@@ -9,7 +9,7 @@ exports.up = function (knex, Promise) {
     return knex.schema.createTable('tweets', table => {
         table.string('id').unique();
     });
-}
+};
 
 /**
  * Reverse the migrations.

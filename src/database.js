@@ -4,7 +4,7 @@ class Database {
     constructor(filename) {
         this.client = knex({
             client: 'sqlite3',
-            connection: { filename },
+            connection: {filename},
             useNullAsDefault: true,
             migrations: {
                 tableName: 'migrations',
@@ -28,7 +28,7 @@ class Database {
 
     addId(id) {
         return new Promise((resolve, reject) => {
-            return this.client.insert({ id }).into('tweets')
+            return this.client.insert({id}).into('tweets')
                 .then(() => resolve(true))
                 .catch(err => reject(err));
         });

@@ -10,7 +10,7 @@ class Twitter {
         });
     }
 
-    fetchTweets(count = 5, hasHashTags = { youtube: 0xFF0000, twitch: 0x392E5C }) {
+    fetchTweets(count = 5, hasHashTags = {youtube: 0xFF0000, twitch: 0x392E5C}) {
         return new Promise((resolve, reject) => {
             this.twit.get('statuses/user_timeline', {
                 screen_name: this.username,
@@ -20,7 +20,7 @@ class Twitter {
                     return reject(err);
                 }
 
-                if (hasHashTags == null || hasHashTags.length == 0) {
+                if (hasHashTags === null || hasHashTags.length === 0) {
                     return resolve(data.map(tweet => {
                         tweet.type = null;
                         return tweet;
@@ -36,7 +36,7 @@ class Twitter {
                         }
                     }
                     return tweet;
-                }).filter(tweet => tweet.type != null));
+                }).filter(tweet => tweet.type !== null));
             });
         });
     }
