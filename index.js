@@ -54,7 +54,10 @@ database.migrate().then(() => {
                         },
                         timestamp: new Date,
                         ur: url
-                    }}).then(() => database.addId(tweet.id_str));
+                    }}).then(() => {
+                        database.addId(tweet.id_str);
+                        channel.send('@here').then(hereMessage => hereMessage.delete());
+                    });
                 });
             }
         });
