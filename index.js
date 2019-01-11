@@ -37,43 +37,43 @@ database.migrate().then(() => {
     });
     client.login(config.discordToken);
 
-    // setInterval(() => {
-    //     let channel = client.channels.find(c => c.id === config.channelId);
-    //     if (channel === null || typeof channel === 'undefined') {
-    //         console.log('Update loop was called with an invalid channel ID of: ' + config.channelId);
-    //         return;
-    //     }
+    setInterval(() => {
+        let channel = client.channels.find(c => c.id === config.channelId);
+        if (channel === null || typeof channel === 'undefined') {
+            console.log('Update loop was called with an invalid channel ID of: ' + config.channelId);
+            return;
+        }
 
-    //     twitter.fetchTweets().then(tweets => {
-    //         if (tweets.length === 0) {
-    //             return;
-    //         }
+        twitter.fetchTweets().then(tweets => {
+            if (tweets.length === 0) {
+                return;
+            }
 
-    //         for (let tweet of tweets) {
-    //             database.hasId(tweet.id_str).then(result => {
-    //                 if (result) {
-    //                     return;
-    //                 }
+            for (let tweet of tweets) {
+                database.hasId(tweet.id_str).then(result => {
+                    if (result) {
+                        return;
+                    }
 
-    //                 let url = tweet.entities.urls.length === 0 ? null :
-    //                     tweet.entities.urls[0].expanded_url;
+                    let url = tweet.entities.urls.length === 0 ? null :
+                        tweet.entities.urls[0].expanded_url;
 
-    //                 channel.send({embed: {
-    //                     color: tweet.type,
-    //                     description: decode(tweet.text),
-    //                     author: {
-    //                         url,
-    //                         name: tweet.user.name,
-    //                         icon_url: tweet.user.profile_image_url_https
-    //                     },
-    //                     timestamp: new Date,
-    //                     ur: url
-    //                 }}).then(() => {
-    //                     database.addId(tweet.id_str);
-    //                     channel.send('@here').then(hereMessage => hereMessage.delete());
-    //                 });
-    //             });
-    //         }
-    //     });
-    // }, 10000);
+                    channel.send({embed: {
+                        color: tweet.type,
+                        description: decode(tweet.text),
+                        author: {
+                            url,
+                            name: tweet.user.name,
+                            icon_url: tweet.user.profile_image_url_https
+                        },
+                        timestamp: new Date,
+                        ur: url
+                    }}).then(() => {
+                        database.addId(tweet.id_str);
+                        channel.send('@here').then(hereMessage => hereMessage.delete());
+                    });
+                });
+            }
+        });
+    }, 10000);
 });

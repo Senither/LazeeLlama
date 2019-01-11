@@ -22,7 +22,7 @@ class ClanCommand extends Command {
 
     showClans(event) {
         let index = 1;
-        let message = 'Select the clan you want to show the members by by using the clan ID.\n```apache\n';
+        let message = 'Select the clan you want to show the members of by using the clan ID.\n```apache\n';
         for (let clan of clans) {
             message += `${index++}: ${clan}\n`;
         }
