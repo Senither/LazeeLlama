@@ -1,6 +1,6 @@
-const http = require('http');
 const Command = require('./Command');
 const clans = require('./../../config.json').clans;
+const ClanController = require('./../controller/ClanController');
 
 class ClanCommand extends Command {
     onCommand(event, args) {
@@ -30,46 +30,34 @@ class ClanCommand extends Command {
     }
 
     showClan(event, name) {
-        http.get(this.buildRequestUrl(name), response => {
-            let data = '';
-            response.on('data', chunk => data += chunk);
-            response.on('end', () => {
-                let members = [];
-                let guildMembers = JSON.parse(data).result.guildMembers;
+        ClanController.getClan(name).then(data => {
+            let members = [];
+            let guildMembers = data.result.guildMembers;
+            for (let id of Object.keys(guildMembers)) {
+                let member = guildMembers[id];
+                members.push([member.nickname, member.highestZone]);
+            }
 
-                for (let id of Object.keys(guildMembers)) {
-                    let member = guildMembers[id];
-                    members.push([member.nickname, member.highestZone]);
+            members.sort((a, b) => b[1] - a[1]);
+
+            let message = '**' + name + '** ```\n         USER         |  ZONE\n';
+            for (let user of members) {
+                let name = user[0];
+                let zone = user[1];
+
+                let addSpace = '         USER         '.length - name.length;
+                message += ' ' + name;
+                for (let i = addSpace - 1; i > 0; --i) {
+                    message += ' ';
                 }
-
-                members.sort((a, b) => b[1] - a[1]);
-
-                let message = '**' + name + '** ```\n         USER         |  ZONE\n';
-                for (let user of members) {
-                    let name = user[0];
-                    let zone = user[1];
-
-                    let addSpace = '         USER         '.length - name.length;
-                    message += ' ' + name;
-                    for (let i = addSpace - 1; i > 0; --i) {
-                        message += ' ';
-                    }
-                    message += '| ' + zone.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '\n';
-                }
-                event.reply(message + '```');
-            });
-        }).on('error', error => {
-            event.reply('Error: ' + error.message);
-        });
+                message += '| ' + zone.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '\n';
+            }
+            event.reply(message + '```');
+        }).catch(error => event.reply('Error ' + error.message));
     }
 
     invalidArgumentGiven(event) {
         return event.reply(`Invalid ID given, the ID must be between **1** and **${clans.length}**`);
-    }
-
-    buildRequestUrl(name) {
-        return 'http://ClickerHeroes-SavedGames3-747864888.us-east-1.elb.amazonaws.com/clans/findGuild.php?uid=0&passwordHash=0&highestZoneReached=0&guildName='
-            + name.replace(/\s/g, '+');
     }
 }
 
