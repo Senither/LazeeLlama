@@ -35,22 +35,35 @@ class ClanCommand extends Command {
             let guildMembers = data.result.guildMembers;
             for (let id of Object.keys(guildMembers)) {
                 let member = guildMembers[id];
-                members.push([member.nickname, member.highestZone]);
+                members.push([member.nickname, {
+                    zone: member.highestZone,
+                    status: data.result.guild.memberUids[member.uid],
+                }]);
             }
 
-            members.sort((a, b) => b[1] - a[1]);
+            members.sort((a, b) => b[1].zone - a[1].zone);
 
-            let message = '**' + name + '** ```\n         USER         |  ZONE\n';
+            let message = '**' + name + '** ```\n         USER         |   ZONE    |   STATUS\n';
             for (let user of members) {
                 let name = user[0];
-                let zone = user[1];
+                let zone = user[1].zone;
+                let status = user[1].status;
+                let line = '';
 
                 let addSpace = '         USER         '.length - name.length;
-                message += ' ' + name;
+                line += ' ' + name;
                 for (let i = addSpace - 1; i > 0; --i) {
-                    message += ' ';
+                    line += ' ';
                 }
-                message += '| ' + zone.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '\n';
+                line += '|  ' + zone.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+                addSpace = '         USER         |   ZONE    |'.length - line.length;
+                for (let i = addSpace - 1; i > 0; --i) {
+                    line += ' ';
+                }
+                line += '|  ' + status.charAt(0).toUpperCase() + status.slice(1);
+
+                message += line + '\n';
             }
             event.reply(message + '```');
         }).catch(error => event.reply('Error ' + error.message));
