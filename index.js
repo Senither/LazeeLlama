@@ -22,7 +22,12 @@ const twitter = new Twitter(config);
 const database = new Database('./tweets.sqlite');
 
 database.migrate().then(() => {
-    client.on('ready', () => console.log(`Logged into Discord using: ${client.user.tag}`));
+    client.on('ready', () => {
+        console.log(`Logged into Discord using: ${client.user.tag}`)
+
+        client.user.setActivity('LazeeLlama\'s Videos', { type: 'WATCHING' });
+    });
+
     client.on('message', event => {
         let parts = event.content.trim().split(' ');
         if (parts.length === 0) {
@@ -35,6 +40,7 @@ database.migrate().then(() => {
             }
         }
     });
+
     client.login(config.discordToken);
 
     setInterval(() => {
