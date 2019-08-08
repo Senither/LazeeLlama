@@ -76,7 +76,10 @@ database.migrate().then(() => {
                         ur: url
                     }}).then(() => {
                         database.addId(tweet.id_str);
-                        channel.send('@here').then(hereMessage => hereMessage.delete());
+                        channel.send('<@&608408161728200735>')
+                               .then(hereMessage => setTimeout(() => {
+                                    hereMessage.delete();
+                               }, 2500));
                     });
                 });
             }
