@@ -1,3 +1,5 @@
+> This project has been archived as it's no longer in use and therefore doesn't get any updates, you're welcome to fork the project to try to use it for your own purposes, however, no support will be provided and there are no guarantees that the project still works.
+
 LazeeLlama
 ==========
 
